@@ -5,8 +5,10 @@
 
 ### Yeah but why?
  Imagine your project has a town where building interiors are different scenes.
- Moving from
+ <br>Moving from
+ ```
 	Town Scene -> House Scene -> Town Scene
+ ```
  will place your character back at whatever the default position of the Town Scene is, rather than the doorway of the house.
  Of course you could store the the position of the player before they enter a new scene, then reassign it as they come back, but...
  
@@ -23,21 +25,21 @@
  Example:
  ```C#
  protected override object[] Decompose(Transform component)
-    {
-        // Note the order of the array; Order will be important for reassignment
-        return new object[] {component.position, component.rotation, component.localScale};
-    }
+ {
+     // Note the order of the array; Order will be important for reassignment
+     return new object[] {component.position, component.rotation, component.localScale};
+ }
  ```
  Compose takes the same array of objects and reassigns the data to the Component
  Example:
  ```C#
  protected override void Compose(Transform component, object[] values)
-    {
-        // Reassign the object array elements to their corresponding component fields
-        transform.position = TryResolve<Vector3>(values, 0);
-        transform.rotation = TryResolve<Quaternion>(values, 1);
-        transform.localScale = TryResolve<Vector3>(values, 2);
-    }
+ {
+     // Reassign the object array elements to their corresponding component fields
+     transform.position = TryResolve<Vector3>(values, 0);
+     transform.rotation = TryResolve<Quaternion>(values, 1);
+     transform.localScale = TryResolve<Vector3>(values, 2);
+ }
  ```
  
 ### Pitfalls!
@@ -45,10 +47,10 @@
  To remediate this concern, the TryResolve method attempts to check that both the index and cast are valid, returning the type's default value otherwise.  Of course this isn't perfect, but realistically, the Compose/Decompose methods are the only way to reassign data, and as long as they are implemented with care, the possibilty of 
  invalid indices/casts shouldn't arise.
  
- The user is wholly responsible for maintaining the data in PersistentData.  It must be manually removed whenever it is no longer required.
- 
  Additionally, you cannot store multiples of the same Component type under a single GUID.
+ 
+ Lastly, the user is wholly responsible for maintaining the data in PersistentData.  It must be manually removed whenever it is no longer required.
  
 ### Some Further Notes:
  Implementation using reflection should also be possible here, but considering Unity components cannot be created with the new keyword, fields must be stored individually in a particularly messy manner.  Considering this, the high additional cost of reflection, and the inability (or rather ease) for the user to define which fields are necessary to store,
- I decided this method of creating persistent Components was less useful.
+ I decided using reflection for creating persistent Components was less useful.
