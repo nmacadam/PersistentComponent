@@ -1,10 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
+namespace PersistentData
+{
+	
+}
 /// <summary>
 /// Stores a Transform component in PersistentData
 /// </summary>
-public class PersistentTransform : PersistentComponent<Transform>
+public class Example_PersistentTransform : PersistentComponent<Transform>
 {
     private void Start()
     {
@@ -31,8 +35,13 @@ public class PersistentTransform : PersistentComponent<Transform>
     protected override void Compose(Transform component, object[] values)
     {
         // Simply reassign the object array elements to their corresponding component fields
-        transform.position = (Vector3)values[0];
-        transform.rotation = (Quaternion)values[1];
-        transform.localScale = (Vector3)values[2];
+        transform.position = TryResolve<Vector3>(values, 0);
+        transform.rotation = TryResolve<Quaternion>(values, 1);
+        transform.localScale = TryResolve<Vector3>(values, 2);
+
+        // Equivalently, although less safe:
+        // transform.position = (Vector3)values[0];
+        // transform.rotation = (Quaternion)values[1];
+        // transform.localScale = (Vector3)values[2];
     }
 }

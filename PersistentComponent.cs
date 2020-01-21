@@ -62,6 +62,33 @@ public abstract class PersistentComponent<T> : MonoBehaviour where T : Component
     }
 
     /// <summary>
+    /// Tries to cast the data at the given index as the given type
+    /// </summary>
+    /// <typeparam name="TData">The type to cast to</typeparam>
+    /// <param name="values">The Component's object data array</param>
+    /// <param name="index">The index of the relevant data</param>
+    /// <returns>The type-casted output</returns>
+    public TData TryResolve<TData>(object[] values, int index)
+    {
+        // Check that index is valid
+        if (values.Length < index - 1 || index < 0)
+        {
+            Debug.LogError($"Value index of '{index}' invalid, returning default");
+            return default;
+        }
+
+        // If the cast is good, return the casted data
+        if (values[index] is TData t)
+        {
+            return t;
+        }
+
+        // Otherwise return default
+        Debug.LogError("Bad cast, returning default");
+        return default;
+    }
+
+    /// <summary>
     /// Does PersistentData contain an entry for this data type for this Guid?
     /// </summary>
     /// <returns>Whether PersistentData contains an entry for this data type for this Guid</returns>
