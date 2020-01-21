@@ -1,10 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PersistentData
-{
-	
-}
 /// <summary>
 /// Stores a Transform component in PersistentData
 /// </summary>
