@@ -42,6 +42,8 @@
  }
  ```
  
+ See [Example_PersistentTransform.cs](Example_PersistentTransform.cs) for a complete implementation example.
+ 
 ### Pitfalls!
  Likely the most obvious concern here is that Persistent component casts up to an object, then back down to the original type.  There's a good chance that if implemented incorrectly, the resulting down-cast will be invalid, or even that the array index being checked is out of range.
  To remediate this concern, the TryResolve method attempts to check that both the index and cast are valid, returning the type's default value otherwise.  Of course this isn't perfect, but realistically, the Compose/Decompose methods are the only way to reassign data, and as long as they are implemented with care, the possibilty of 
